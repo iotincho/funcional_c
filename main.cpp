@@ -2,17 +2,30 @@
 #include <functional>
 #include <vector>
 typedef std::function<int(int)> FuncionUnaria;
+typedef std::function<bool(int)> Predicado;
 
 template <typename VALUES_TYPE>
 auto map(FuncionUnaria fn, std::vector<VALUES_TYPE> inVector) -> std::vector<VALUES_TYPE>
 {
     std::vector<VALUES_TYPE> outVector;
     outVector.resize(inVector.size());
-    std::transform(std::begin(inVector), std::end(inVector),
-            std::begin(outVector),fn);
+    std::transform( std::begin(inVector),
+                    std::end(inVector),
+                    std::begin(outVector),
+                    fn);
     return outVector;
 }
 
+template<typename OBJ_TYPE>
+auto filter(Predicado pr,std::vector<OBJ_TYPE> inVector) -> std::vector<OBJ_TYPE>
+{
+    std::vector<OBJ_TYPE> outVector;
+    std::copy_if( std::begin(inVector),
+                  std::end(inVector),
+                  std::back_inserter(outVector),
+                  pr);
+    return outVector;
+}
 
 
 
@@ -24,7 +37,7 @@ auto main() -> int
         v1.push_back(i);
     }
 
-    auto v2 = map<int>([](int x){return x+x;},v1);
+    auto v2 = filter<int>([](int x){return x>5;},v1);
 
     std::cout<<std::endl;
     for(auto v:v1) std::cout<< v << "-";
