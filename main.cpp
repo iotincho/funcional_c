@@ -1,33 +1,40 @@
 #include <iostream>
-#include "high_order_functions.cpp"
 #include <vector>
+#include "high_order_functions.cpp"
+#include "grafo_utils.cpp"
+#include "dijkstra_utils.cpp"
+
+auto v1 = Vertice(1);
+auto v2 = Vertice(2);
+auto v3 = Vertice(3);
+auto v4 = Vertice(4);
+auto v5 = Vertice(5);
+
+auto a1= Arista(v1,v2,5);
+auto a2= Arista(v1,v3,2);
+auto a3= Arista(v1,v4,3);
+auto a4= Arista(v2,v5,1);
+auto a5= Arista(v3,v2,7);
+auto a6= Arista(v4,v2,1);
+auto a7= Arista(v4,v3,4);
+auto a8= Arista(v4,v5,7);
+
+std::vector<Vertice> verticesprueva = {v1,v2,v3,v4,v5};
+std::vector<Arista> aristasprueva = {a1,a2,a3,a4,a5,a6,a7,a8};
 
 int main()
 {
-    std::vector<int> v1;
+    auto grafoprueva = Grafo(verticesprueva, aristasprueva);
 
-    for(int i=0;i<10;i++){
-        v1.push_back(1);
+    auto res = costo(aristasprueva,v3,v2);
+
+    std::cout << "res:" << res << std::endl;
+
+
+    auto res2 = previnicial(v2);
+    for(auto r : res2) {
+        std::cout << "res2:" << r.nombre << std::endl;
     }
-/*
-    auto v2 = filter<int>([](int x){return x>5;},v1);
-
-    std::cout<<std::endl;
-    for(auto v:v1) std::cout<< v << "-";
-    std::cout<<std::endl;
-
-    std::cout<<std::endl;
-    for(auto v:v2) std::cout<< v <<"-";
-    std::cout<<std::endl;
-
-*/
-    auto value = foldl<int>([](int x,int y){return x+y;},0,v1);
-    auto value2 = foldr<int>([](int x,int y){return x+y;},0,v1);
-    std::cout<<std::endl;
-    std::cout<< "foldl = " << value;
-    std::cout<<std::endl;
-    std::cout<< "foldr = " << value2;
-    std::cout<<std::endl;
 
     return 0;
 }
