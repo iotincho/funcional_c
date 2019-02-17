@@ -70,12 +70,43 @@ auto costo(Aristas as, Vertice o, Vertice d) -> Peso
 
 auto previnicial(Vertice v) -> Prev
 {
+    /**
+     * previnicial v = map (\x->if (x==v) then v else verticenulo) verticesprueba
+     */
     return map<Vertice,Vertice>([v](Vertice x){
         return (x.nombre == v.nombre)? v:verticenulo;},
                 verticesprueva);
 }
 
+auto acuinicial(Aristas a, Vertice v) -> Pacu
+{
+    /**
+     * acuinicial a v = map (\x->if (x==v) then 0 else (costo a v x)) verticesprueba
+     */
+    return map<Peso,Vertice>( [a, v](Vertice x){
+                                return (x.nombre==v.nombre)? (Peso)0:costo(a, v, x);},
+                             verticesprueva);
+}
 
+template<typename A>
+auto cambiarnth(A a, int32_t n,std::vector<A> vector) -> std::vector<A>
+{
+    /**
+     * cambiarnth:: a -> Int -> [a] -> [a]
+     * cambiarnth a n [] = []
+     * cambiarnth a 0 (x:xs) = a:xs
+     * cambiarnth a n (x:xs) = x:(cambiarnth a (n-1) xs)
+     */
+    if (vector.empty()) return std::vector<A>();
+    else if (n==0){vector.front()=a; return vector;}
+    else {
+        auto vaux = cambiarnth(a,n-1,std::vector<A>(vector.begin()+1,vector.end()));
+        vaux.insert(vaux.begin(),vector.front());
+        return vaux;}
+    /* else vector.at(n) = a; // la funcion se puede reducir como esto. pero si esta fuera de rango retorna una exepcion y no es recursivo.*/
+
+
+}
 
 
 

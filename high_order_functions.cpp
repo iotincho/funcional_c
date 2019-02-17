@@ -15,9 +15,9 @@
 template <typename RET_OBJ_TYPE,typename OBJ_TYPE>
 auto map( std::function<RET_OBJ_TYPE(OBJ_TYPE)> fn,
           std::vector<OBJ_TYPE> inVector)
-          -> std::vector<OBJ_TYPE>
+          -> std::vector<RET_OBJ_TYPE>
 {
-    std::vector<OBJ_TYPE> outVector;
+    std::vector<RET_OBJ_TYPE> outVector;
     outVector.resize(inVector.size());
     transform( std::begin(inVector),
                     std::end(inVector),

@@ -26,14 +26,15 @@ int main()
 {
     auto grafoprueva = Grafo(verticesprueva, aristasprueva);
 
-    auto res = costo(aristasprueva,v3,v2);
+    auto res2 = acuinicial(aristasprueva,v4);
 
-    std::cout << "res:" << res << std::endl;
+    std::vector<int> va = {1,2,3};
+    std::vector<int> vb = {4,5,6};
 
-
-    auto res2 = previnicial(v2);
-    for(auto r : res2) {
-        std::cout << "res2:" << r.nombre << std::endl;
+    va = cambiarnth<int>(0,1,va);
+    //va = va.erase(va.begin());
+    for(auto r : va) {
+        std::cout << "res2:" << r << std::endl;
     }
 
     return 0;
