@@ -26,16 +26,26 @@ int main()
 {
     auto grafoprueva = Grafo(verticesprueva, aristasprueva);
 
-    auto res2 = acuinicial(aristasprueva,v4);
+    auto res2 = generarinicial(v2);
 
-    std::vector<int> va = {1,2,3};
-    std::vector<int> vb = {4,5,6};
 
-    va = cambiarnth<int>(0,1,va);
-    //va = va.erase(va.begin());
-    for(auto r : va) {
-        std::cout << "res2:" << r << std::endl;
+    for(auto r : res2.vc) {
+        std::cout << "vc:" << r.nombre<< std::endl;
     }
+    for(auto r : res2.vnc) {
+        std::cout << "vnc:" << r.nombre<< std::endl;
+    }
+    for(auto r : res2.a) {
+        std::cout << "arista:" << r.peso<< std::endl;
+    }
+    int i = 1;
+    for(auto r : res2.pacu) {
+        std::cout << "pacu to "<< i++ << ": " << r << std::endl;
+    }
+    for(auto r : res2.prev) {
+        std::cout << "prev: " << r.nombre<< std::endl;
+    }
+
 
     return 0;
 }

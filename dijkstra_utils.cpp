@@ -20,6 +20,7 @@ typedef std::vector<Vertice> Prev;
 typedef std::vector<Arista> Aristas;
 
 extern std::vector<Vertice> verticesprueva;
+extern Aristas aristasprueva;
 
 static const auto verticenulo = Vertice(0);
 
@@ -51,7 +52,15 @@ class Dijkstra{
         VNC vnc;
         Pacu pacu;
         Prev prev;
-        Dijkstra(){}
+        Dijkstra(){};
+        Dijkstra(Aristas a,VC vc,VNC vnc, Pacu pacu, Prev prev)
+        {
+            this->a = a;
+            this->vc = vc;
+            this->vnc =vnc;
+            this->pacu = pacu;
+            this->prev = prev;
+        }
 };
 
 auto costo(Aristas as, Vertice o, Vertice d) -> Peso
@@ -104,9 +113,21 @@ auto cambiarnth(A a, int32_t n,std::vector<A> vector) -> std::vector<A>
         vaux.insert(vaux.begin(),vector.front());
         return vaux;}
     /* else vector.at(n) = a; // la funcion se puede reducir como esto. pero si esta fuera de rango retorna una exepcion y no es recursivo.*/
-
-
 }
+
+auto generarinicial(Vertice v) -> Dijkstra
+{
+    /**
+     * generarinicial :: Vertice -> Dijkstra
+     * generarinicial v = Dij (aristasprueba) (vercono v) (vernocono v) (acuinicial (aristasprueba) v) (previnicial v)
+     */
+    return Dijkstra( aristasprueva,
+                     vercono(v),
+                     vernocono(v),
+                     acuinicial(aristasprueva,v),
+                     previnicial(v));
+}
+
 
 
 
