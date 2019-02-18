@@ -7,6 +7,7 @@
 #include <vector>
 #include "grafo_utils.cpp"
 #include "high_order_functions.cpp"
+#include <tuple>
 
 #define INFINITO 100
 
@@ -146,6 +147,41 @@ auto getpeso(Pacu p, Vertice v) ->Peso
      */
     return at<Peso>(p,v.nombre);
 }
+
+
+auto actpeso(std::tuple<Pacu,Prev> t, Aristas ars) -> std::tuple<Pacu,Prev>
+{
+    /**
+     *  actpeso::(Pacu , Prev) -> Aristas ->(Pacu,Prev)
+     *  actpeso (p, pr) [] = (p,pr)
+     *  actpeso (p, pr) (a:as) = actpeso (nuevocos,nuevopre)   as
+     *     where cambiar  = cambiarnth (costonuevo) (nombre (dest a)-1) p
+     *           cambiarpre = cambiarnth (orig a) (nombre (dest a)-1) pr
+     *          costonuevo = (peso a) + getpeso p (orig a)
+     *           nuevocos  = if ((costonuevo) < getpeso p (dest a)) then cambiar else p
+     *           nuevopre  = if ((costonuevo) < getpeso p (dest a)) then cambiarpre else pr
+     */
+
+    if(ars.empty()) return t;
+
+    //unpacking de datos
+    Pacu p;
+    Prev pr;
+    tie(p,pr)=t;  // unpacking
+    auto a = ars.front(); // desligo la cabeza
+    Aristas as;
+    std::copy(ars.begin()+1,ars.end(),std::back_inserter(as)); // copio tail
+
+    auto costonuevo = a.peso + getpeso(p ,a.orig);
+    auto cambiar = cambiarnth(costonuevo , a.dest.nombre-1, p);
+    auto cambiarpre = cambiarnth(a.orig, a.dest.nombre-1,pr);
+    auto nuevocos = (costonuevo < getpeso(p,a.dest))? cambiar:p;
+    auto nuevopre = (costonuevo < getpeso(p,a.dest))? cambiarpre:pr;
+
+    return actpeso(std::make_tuple(nuevocos,nuevopre),as);
+}
+
+
 
 
 
