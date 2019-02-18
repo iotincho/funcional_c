@@ -24,6 +24,16 @@ extern Aristas aristasprueva;
 
 static const auto verticenulo = Vertice(0);
 
+template <typename A>
+auto at(std::vector<A> xs, int32_t i) -> A
+{
+    /**
+     * at:: [a] -> Int -> a
+     * at xs i = xs !! (i-1)
+     */
+    return xs.at(i-1);
+}
+
 auto vercono(Vertice v) -> std::vector<Vertice>
 {
     /**
@@ -126,6 +136,15 @@ auto generarinicial(Vertice v) -> Dijkstra
                      vernocono(v),
                      acuinicial(aristasprueva,v),
                      previnicial(v));
+}
+
+auto getpeso(Pacu p, Vertice v) ->Peso
+{
+    /**
+     * getpeso:: Pacu -> Vertice -> Peso
+     * getpeso p v = at p (nombre v)
+     */
+    return at<Peso>(p,v.nombre);
 }
 
 

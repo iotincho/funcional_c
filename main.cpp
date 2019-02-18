@@ -46,6 +46,7 @@ int main()
         std::cout << "prev: " << r.nombre<< std::endl;
     }
 
+    std::cout<<"getpeso : "<< getpeso(res2.pacu,v5);
 
     return 0;
 }
