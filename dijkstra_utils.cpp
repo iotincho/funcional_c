@@ -40,7 +40,7 @@ auto vercono(Vertice v) -> std::vector<Vertice>
     /**
      * vercono v = filter (\x->x==v) verticesprueba
      */
-    return filter<Vertice>([=](Vertice x){ return x.nombre==v.nombre;},
+    return filter<Vertice>([=](Vertice x){ return x==v;},
                             verticesprueva);
 }
 
@@ -49,7 +49,7 @@ auto vernocono(Vertice v) -> std::vector<Vertice>
     /**
      * vercono v = filter (\x->x==v) verticesprueba
      */
-    return filter<Vertice>([=](Vertice x){ return x.nombre!=v.nombre;},
+    return filter<Vertice>([=](Vertice x){ return x!=v;},
                            verticesprueva);
 }
 
@@ -63,7 +63,6 @@ class Dijkstra{
         VNC vnc;
         Pacu pacu;
         Prev prev;
-        Dijkstra(){};
         Dijkstra(Aristas a,VC vc,VNC vnc, Pacu pacu, Prev prev)
         {
             this->a = a;
@@ -83,7 +82,7 @@ auto costo(Aristas as, Vertice o, Vertice d) -> Peso
      */
     auto filtrado = [as, o, d]() -> Aristas {
         return filter<Arista>( [=](Arista a){
-            return (a.orig.nombre==o.nombre) && (a.dest.nombre==d.nombre); }, as);};
+            return (a.orig==o) && (a.dest==d); }, as);};
     if(filtrado().empty()) return INFINITO;
     else return filtrado().front().peso;
 }
@@ -94,7 +93,7 @@ auto previnicial(Vertice v) -> Prev
      * previnicial v = map (\x->if (x==v) then v else verticenulo) verticesprueba
      */
     return map<Vertice,Vertice>([v](Vertice x){
-        return (x.nombre == v.nombre)? v:verticenulo;},
+        return (x == v)? v:verticenulo;},
                 verticesprueva);
 }
 
@@ -104,7 +103,7 @@ auto acuinicial(Aristas a, Vertice v) -> Pacu
      * acuinicial a v = map (\x->if (x==v) then 0 else (costo a v x)) verticesprueba
      */
     return map<Peso,Vertice>( [a, v](Vertice x){
-                                return (x.nombre==v.nombre)? (Peso)0:costo(a, v, x);},
+                                return (x==v)? (Peso)0:costo(a, v, x);},
                              verticesprueva);
 }
 
@@ -182,6 +181,57 @@ auto actpeso(std::tuple<Pacu,Prev> t, Aristas ars) -> std::tuple<Pacu,Prev>
 }
 
 
+template <typename OBJ_TYPE>
+auto elem(OBJ_TYPE o,std::vector<OBJ_TYPE> v) -> bool
+{
+    if (v.empty()) return false;
+    if (v.front() == o) return true;
+    return elem<OBJ_TYPE>(o,std::vector(v.begin()+1,v.end()));
+}
+
+
+auto iteracion(Dijkstra d) -> Dijkstra
+{
+    /**
+     * iteracion::Dijkstra -> Dijkstra
+     * iteracion d = Dij (a d) (nuevocon d) (nuevonocono d) (nuevoacu d) (nuevoprev d)
+     *     where next = foldl (\x y->if ((getpeso (pacu d) x) < (getpeso (pacu d) y)) then x else y) (head $ vnc d) (vnc d)
+     *           nuevocon d = (next):(vc d)
+     *           nuevonocono d = filter (/=next ) (vnc d)
+     *           acandidata = filter (\x-> orig x == next) (a d)
+     *           avalidas   = filter (\x-> dest x `elem` (vnc d)) acandidata
+     *           resul      = actpeso (pacu d,prev d) avalidas
+     *           nuevoacu d = fst resul
+     *           nuevoprev d = snd resul
+     */
+    auto next = foldl<Vertice>([d](Vertice x, Vertice y){
+                            return (getpeso(d.pacu, x) < getpeso(d.pacu, y))? x:y;},
+                       d.vnc.front(),
+                       d.vnc);
+    auto nuevocon = [next](Dijkstra dd){dd.vc.insert(dd.vc.begin(),next);return dd.vc;};
+    auto nuevonocono = [next](Dijkstra dd){
+                                return filter<Vertice>([next](Vertice x){return x!=next;},
+                                                       dd.vnc);};
+    auto acandidata = filter<Arista>([next](Arista x){return x.orig==next;},
+                                        d.a);
+    auto avalidas = filter<Arista>([d](Arista x){ return elem<Vertice>(x.dest,d.vnc);},
+                                    acandidata);
+    auto resul = actpeso(std::make_tuple(d.pacu,d.prev),avalidas);
+    auto nuevoacu = [resul](Dijkstra dd){ return std::get<0>(resul);};
+    auto nuevoprev = [resul](Dijkstra dd){ return std::get<1>(resul);};
+
+    return Dijkstra(d.a,
+                    nuevocon(d),
+                    nuevonocono(d),
+                    nuevoacu(d),
+                    nuevoprev(d));
+}
+
+auto caminocorto (Dijkstra d) -> Dijkstra
+{
+    if(d.vnc.empty()) return d;
+    return caminocorto(iteracion(d));
+}
 
 
 

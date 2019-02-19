@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <functional>
+#include <algorithm>
 #include <vector>
 #include <numeric>
 #include "high_order_functions.h"
@@ -19,7 +20,7 @@ auto map( std::function<RET_OBJ_TYPE(OBJ_TYPE)> fn,
 {
     std::vector<RET_OBJ_TYPE> outVector;
     outVector.resize(inVector.size());
-    transform( std::begin(inVector),
+    std::transform( std::begin(inVector),
                     std::end(inVector),
                     std::begin(outVector),
                     fn);

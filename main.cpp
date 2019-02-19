@@ -26,27 +26,11 @@ int main()
 {
     auto grafoprueva = Grafo(verticesprueva, aristasprueva);
 
-    auto res2 = generarinicial(v2);
+    auto res = elem<Vertice>(v4,verticesprueva);
 
-
-    for(auto r : res2.vc) {
-        std::cout << "vc:" << r.nombre<< std::endl;
-    }
-    for(auto r : res2.vnc) {
-        std::cout << "vnc:" << r.nombre<< std::endl;
-    }
-    for(auto r : res2.a) {
-        std::cout << "arista:" << r.peso<< std::endl;
-    }
-    int i = 1;
-    for(auto r : res2.pacu) {
-        std::cout << "pacu to "<< i++ << ": " << r << std::endl;
-    }
-    for(auto r : res2.prev) {
-        std::cout << "prev: " << r.nombre<< std::endl;
-    }
-
-    std::cout<<"getpeso : "<< getpeso(res2.pacu,v5);
+    auto dij = generarinicial(v3);
+    auto cc = caminocorto(dij);
+    std::cout<< "res: "<< res ;
 
     return 0;
 }

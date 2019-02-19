@@ -16,6 +16,14 @@ class Vertice{
         {
             this->nombre = nombre;
         }
+        bool operator==(Vertice v)
+        {
+            return this->nombre==v.nombre;
+        }
+        bool operator!=(Vertice v)
+        {
+            return this->nombre!=v.nombre;
+        }
 };
 
 class Arista{
@@ -29,6 +37,11 @@ class Arista{
             this->orig = orig;
             this->dest = dest;
             this->peso = peso;
+        }
+
+        bool operator==(Arista a)
+        {
+            return this->orig==a.orig && this->dest==a.dest;
         }
 };
 
