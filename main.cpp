@@ -24,13 +24,31 @@ std::vector<Arista> aristasprueva = {a1,a2,a3,a4,a5,a6,a7,a8};
 
 int main()
 {
-    auto grafoprueva = Grafo(verticesprueva, aristasprueva);
-
-    auto res = elem<Vertice>(v4,verticesprueva);
-
-    auto dij = generarinicial(v3);
+    auto vIni=v1;
+    auto dij = generarinicial(vIni);
     auto cc = caminocorto(dij);
-    std::cout<< "res: "<< res ;
+
+    std::cout<<std::endl<<"Inicial: "<<vIni.nombre;
+
+    std::cout<<std::endl<<"Aristas: ";
+    for(auto v:cc.a)
+        std::cout<<v<<", ";
+
+    std::cout<<std::endl<<"VC: ";
+    for(auto v:cc.vc)
+        std::cout<<v<<", ";
+
+    std::cout<<std::endl<<"VNC: ";
+    for(auto v:cc.vnc)
+        std::cout<<v<<", ";
+
+    std::cout<<std::endl<<"Pacu: ";
+    for(auto v:cc.pacu)
+        std::cout<<v<<", ";
+
+    std::cout<<std::endl<<"Prev: ";
+    for(auto v:cc.prev)
+        std::cout<<v<<", ";
 
     return 0;
 }

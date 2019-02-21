@@ -186,7 +186,7 @@ auto elem(OBJ_TYPE o,std::vector<OBJ_TYPE> v) -> bool
 {
     if (v.empty()) return false;
     if (v.front() == o) return true;
-    return elem<OBJ_TYPE>(o,std::vector(v.begin()+1,v.end()));
+    return elem<OBJ_TYPE>(o,std::vector<OBJ_TYPE>(v.begin()+1,v.end()));
 }
 
 

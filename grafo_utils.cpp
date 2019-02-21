@@ -6,6 +6,8 @@
 
 #include <cstdint>
 #include <vector>
+#include <string>
+#include <ostream>
 
 class Vertice{
     public:
@@ -24,7 +26,20 @@ class Vertice{
         {
             return this->nombre!=v.nombre;
         }
+
 };
+
+std::ostream& operator<<(std::ostream& os, const Vertice& v)
+{
+    /**
+     * esta definido fuera de la clase xq debe ser implementada como funcion no miembro
+     * instance Show (Vertice) where show (Vertice n) = show (n)
+     */
+    os << v.nombre;
+    return os;
+}
+
+
 
 class Arista{
     public:
@@ -44,6 +59,17 @@ class Arista{
             return this->orig==a.orig && this->dest==a.dest;
         }
 };
+
+
+std::ostream& operator<<(std::ostream& os, const Arista& a)
+{
+    /**
+     * esta definido fuera de la clase xq debe ser implementada como funcion no miembro
+     * instance Show (Arista) where show (Arista orig dest peso) = "("++(show orig)++"->"++(show dest)++","++(show peso)++")")
+     */
+    os <<"( "<<a.orig<<"->"<<a.dest<<" , "<<a.peso<<" )" ;
+    return os;
+}
 
 class Grafo{
     public:
